@@ -24,5 +24,10 @@
 
     <string name="cd_banner">Banner</string>
 
-
+    <string-array name="experience_list">
+        <item>&lt; 1 Tahun</item>
+        <item>1 - 3 Tahun</item>
+        <item>3 - 5 Tahun</item>
+        <item>&gt; 5 Tahun</item>
+    </string-array>
 </resources>
