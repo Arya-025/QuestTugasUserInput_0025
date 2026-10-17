@@ -300,3 +300,23 @@ private fun formFieldColors() = OutlinedTextFieldDefaults.colors(
     unfocusedPlaceholderColor = colorResource(R.color.text_hint),
     disabledPlaceholderColor = colorResource(R.color.text_hint)
 )
+
+@Composable
+private fun FormTextField(
+    value: String,
+    onValueChange: (String) -> Unit,
+    hint: String,
+    modifier: Modifier = Modifier
+) {
+    OutlinedTextField(
+        value = value,
+        onValueChange = onValueChange,
+        placeholder = {
+            Text(text = hint, fontSize = dimensionResource(R.dimen.field_text_size).toSp())
+        },
+        singleLine = true,
+        shape = RoundedCornerShape(dimensionResource(R.dimen.field_corner)),
+        colors = formFieldColors(),
+        modifier = modifier.heightIn(min = dimensionResource(R.dimen.field_height))
+    )
+}
