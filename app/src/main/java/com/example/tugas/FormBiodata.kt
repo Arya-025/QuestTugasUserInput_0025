@@ -80,3 +80,38 @@ fun FormBiodataScreen() {
         }
     }
 }
+
+@Composable
+private fun BannerSection() {
+    Box(modifier = Modifier.fillMaxWidth()) {
+        Image(
+            painter = painterResource(R.drawable.img_banner),
+            contentDescription = stringResource(R.string.cd_banner),
+            contentScale = ContentScale.Crop,
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(dimensionResource(R.dimen.banner_height))
+        )
+
+        // Indikator dots (dekoratif)
+        Row(
+            modifier = Modifier.padding(
+                top = dimensionResource(R.dimen.dot_padding_top),
+                start = dimensionResource(R.dimen.dot_padding_start)
+            ),
+            horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.dot_spacing))
+        ) {
+            repeat(4) { index ->
+                Box(
+                    modifier = Modifier
+                        .size(dimensionResource(R.dimen.dot_size))
+                        .clip(CircleShape)
+                        .background(
+                            if (index == 0) colorResource(R.color.dot_active)
+                            else colorResource(R.color.dot_inactive)
+                        )
+                )
+            }
+        }
+    }
+}
