@@ -287,3 +287,16 @@ private fun FormCard(modifier: Modifier = Modifier) {
         }
     }
 }
+
+@Composable
+private fun formFieldColors() = OutlinedTextFieldDefaults.colors(
+    focusedBorderColor = colorResource(R.color.purple_primary),
+    unfocusedBorderColor = colorResource(R.color.field_border),
+    disabledBorderColor = colorResource(R.color.field_border),
+    focusedTextColor = colorResource(R.color.text_primary),
+    unfocusedTextColor = colorResource(R.color.text_primary),
+    disabledTextColor = colorResource(R.color.text_primary),
+    focusedPlaceholderColor = colorResource(R.color.text_hint),
+    unfocusedPlaceholderColor = colorResource(R.color.text_hint),
+    disabledPlaceholderColor = colorResource(R.color.text_hint)
+)
