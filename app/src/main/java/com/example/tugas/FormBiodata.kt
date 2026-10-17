@@ -115,3 +115,175 @@ private fun BannerSection() {
         }
     }
 }
+
+@Composable
+private fun FormCard(modifier: Modifier = Modifier) {
+    val context = LocalContext.current
+
+    var firstName by remember { mutableStateOf("") }
+    var lastName by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
+    var birthDate by remember { mutableStateOf("") }
+    var experience by remember { mutableStateOf("") }
+
+    val skillList = listOf(
+        R.string.skill_android,
+        R.string.skill_uiux,
+        R.string.skill_web
+    )
+    val skillState = remember { mutableStateMapOf<Int, Boolean>() }
+
+    val isFormValid = firstName.isNotBlank() &&
+            lastName.isNotBlank() &&
+            email.isNotBlank() &&
+            birthDate.isNotBlank() &&
+            experience.isNotBlank() &&
+            skillState.values.any { it }
+
+    val cardShape = RoundedCornerShape(
+        topStart = dimensionResource(R.dimen.card_corner),
+        topEnd = dimensionResource(R.dimen.card_corner)
+    )
+
+    Surface(
+        modifier = modifier
+            .fillMaxSize()
+            .padding(top = dimensionResource(R.dimen.card_top_margin))
+            .shadow(dimensionResource(R.dimen.card_elevation), cardShape),
+        shape = cardShape,
+        color = colorResource(R.color.surface_card)
+    ) {
+        Column(
+            modifier = Modifier
+                .verticalScroll(rememberScrollState())
+                .padding(
+                    horizontal = dimensionResource(R.dimen.card_padding_horizontal),
+                    vertical = dimensionResource(R.dimen.card_padding_vertical)
+                ),
+            horizontalAlignment = Alignment.CenterHorizontally
+        ) {
+            Text(
+                text = stringResource(R.string.form_title),
+                color = colorResource(R.color.purple_title),
+                fontSize = dimensionResource(R.dimen.title_size).toSp(),
+                fontWeight = FontWeight.Bold
+            )
+            Spacer(Modifier.height(dimensionResource(R.dimen.spacing_small)))
+            Text(
+                text = stringResource(R.string.form_subtitle),
+                color = colorResource(R.color.text_subtitle),
+                fontSize = dimensionResource(R.dimen.subtitle_size).toSp()
+            )
+
+            Spacer(Modifier.height(dimensionResource(R.dimen.spacing_large)))
+
+            // Nama Depan & Nama Belakang
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))
+            ) {
+                FormTextField(
+                    value = firstName,
+                    onValueChange = { firstName = it },
+                    hint = stringResource(R.string.hint_first_name),
+                    modifier = Modifier.weight(1f)
+                )
+                FormTextField(
+                    value = lastName,
+                    onValueChange = { lastName = it },
+                    hint = stringResource(R.string.hint_last_name),
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(dimensionResource(R.dimen.spacing_medium)))
+
+            // Email
+            FormTextField(
+                value = email,
+                onValueChange = { email = it },
+                hint = stringResource(R.string.hint_email),
+                modifier = Modifier.fillMaxWidth()
+            )
+
+            Spacer(Modifier.height(dimensionResource(R.dimen.spacing_medium)))
+
+            // Tgl Lahir & Experience
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.spacedBy(dimensionResource(R.dimen.spacing_small))
+            ) {
+                BirthDateField(
+                    value = birthDate,
+                    onDateSelected = { birthDate = it },
+                    modifier = Modifier.weight(1f)
+                )
+                ExperienceDropdown(
+                    selected = experience,
+                    onSelected = { experience = it },
+                    modifier = Modifier.weight(1f)
+                )
+            }
+
+            Spacer(Modifier.height(dimensionResource(R.dimen.spacing_medium)))
+
+            // Skill
+            Text(
+                text = stringResource(R.string.label_skill),
+                color = colorResource(R.color.text_primary),
+                fontSize = dimensionResource(R.dimen.label_size).toSp(),
+                fontWeight = FontWeight.Bold,
+                modifier = Modifier.fillMaxWidth()
+            )
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                skillList.forEach { skillRes ->
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Checkbox(
+                            checked = skillState[skillRes] ?: false,
+                            onCheckedChange = { skillState[skillRes] = it },
+                            colors = CheckboxDefaults.colors(
+                                checkedColor = colorResource(R.color.purple_primary),
+                                uncheckedColor = colorResource(R.color.text_primary)
+                            )
+                        )
+                        Text(
+                            text = stringResource(skillRes),
+                            color = colorResource(R.color.text_primary),
+                            fontSize = dimensionResource(R.dimen.skill_text_size).toSp()
+                        )
+                    }
+                }
+            }
+
+            Spacer(Modifier.height(dimensionResource(R.dimen.spacing_large)))
+
+            // Tombol Proceed
+            val successMsg = stringResource(R.string.msg_success, firstName)
+            Button(
+                onClick = {
+                    Toast.makeText(context, successMsg, Toast.LENGTH_SHORT).show()
+                },
+                enabled = isFormValid,
+                shape = RoundedCornerShape(dimensionResource(R.dimen.button_corner)),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(R.color.purple_primary),
+                    contentColor = colorResource(R.color.button_text),
+                    disabledContainerColor = colorResource(R.color.button_disabled),
+                    disabledContentColor = colorResource(R.color.button_disabled_text)
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(dimensionResource(R.dimen.button_height))
+            ) {
+                Text(
+                    text = stringResource(R.string.btn_proceed),
+                    fontWeight = FontWeight.Bold
+                )
+            }
+        }
+    }
+}
