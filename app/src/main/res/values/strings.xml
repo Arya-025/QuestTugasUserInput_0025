@@ -12,5 +12,6 @@
 
     <string name="label_skill">Pilih Skill Anda :</string>
     <string name="skill_android">Android</string>
+    <string name="skill_uiux">UI/UX</string>
 
 </resources>
