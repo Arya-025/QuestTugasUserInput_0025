@@ -320,3 +320,65 @@ private fun FormTextField(
         modifier = modifier.heightIn(min = dimensionResource(R.dimen.field_height))
     )
 }
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+private fun BirthDateField(
+    value: String,
+    onDateSelected: (String) -> Unit,
+    modifier: Modifier = Modifier
+) {
+    var showDialog by remember { mutableStateOf(false) }
+    val datePickerState = rememberDatePickerState()
+    val dateFormat = stringResource(R.string.date_format)
+
+    Box(modifier = modifier) {
+        OutlinedTextField(
+            value = value,
+            onValueChange = {},
+            readOnly = true,
+            enabled = false,
+            placeholder = {
+                Text(
+                    text = stringResource(R.string.hint_birth_date),
+                    fontSize = dimensionResource(R.dimen.field_text_size).toSp()
+                )
+            },
+            singleLine = true,
+            shape = RoundedCornerShape(dimensionResource(R.dimen.field_corner)),
+            colors = formFieldColors(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .heightIn(min = dimensionResource(R.dimen.field_height))
+        )
+        // Layer transparan untuk menangkap klik
+        Box(
+            modifier = Modifier
+                .matchParentSize()
+                .clickableNoRipple { showDialog = true }
+        )
+    }
+
+    if (showDialog) {
+        DatePickerDialog(
+            onDismissRequest = { showDialog = false },
+            confirmButton = {
+                TextButton(onClick = {
+                    datePickerState.selectedDateMillis?.let {
+                        onDateSelected(
+                            SimpleDateFormat(dateFormat, Locale.getDefault()).format(Date(it))
+                        )
+                    }
+                    showDialog = false
+                }) { Text(stringResource(R.string.btn_ok)) }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) {
+                    Text(stringResource(R.string.btn_cancel))
+                }
+            }
+        ) {
+            DatePicker(state = datePickerState)
+        }
+    }
+}
